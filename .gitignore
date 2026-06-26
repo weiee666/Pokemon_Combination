@@ -12,6 +12,9 @@ dataset_prep/*.tar.gz
 *.tar.gz
 weights/
 
+# ...except the main training set (the 30MB centered dataset is shipped with the repo)
+!dataset_prep/pokemon_all_centered.tar.gz
+
 # ---- os / ide / misc ----
 .DS_Store
 .idea/

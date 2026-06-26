@@ -33,6 +33,16 @@ ckpt = hf_hub_download(
 state = torch.load(ckpt, map_location="cpu")   # model classes are defined in the notebooks
 ```
 
+## Dataset
+
+The main training set — **`pokemon_all_centered`** (13,085 re-centered 96×96 sprites, used by exp09) — ships with the repo as a 30 MB tarball:
+
+```bash
+cd dataset_prep && tar -xzf pokemon_all_centered.tar.gz   # -> pokemon_all_centered/  (13,085 PNGs)
+```
+
+Files are named `<name>__<index>.png`; the matching text descriptions are in [`descriptions.json`](descriptions.json). The other variants (raw `pokemon_all`, the 20-class sets, augmented) can be regenerated from PokéAPI with the `dataset_prep/` scripts (`fetch_all_pokemon.py` → `recenter.py` / `augment.py`).
+
 ## Experiments
 
 | exp | data | conditioning | attention | classes | params |
