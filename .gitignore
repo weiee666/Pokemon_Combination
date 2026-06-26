@@ -1,0 +1,21 @@
+# ---- large data / weights (do NOT push) ----
+dataset_prep/.venv/
+dataset_prep/pokemon20/
+dataset_prep/pokemon20_aug/
+dataset_prep/pokemon20_clean/
+dataset_prep/pokemon_all/
+dataset_prep/pokemon_all_centered/
+dataset_prep/*.tar.gz
+**/checkpoints/
+*.pt
+*.pth
+*.tar.gz
+weights/
+
+# ---- os / ide / misc ----
+.DS_Store
+.idea/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+*.bak

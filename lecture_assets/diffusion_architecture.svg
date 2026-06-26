@@ -1,0 +1,76 @@
+<svg width="900" height="500" viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+    <marker id="arrow-gray" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,1 L9,5 L0,9 Z" fill="#64748b"/>
+    </marker>
+    <marker id="arrow-skip" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,1 L9,5 L0,9 Z" fill="#d97706"/>
+    </marker>
+    <style>
+      .title{font-size:22px;font-weight:700;fill:#0f172a}
+      .tiny{font-size:11px;fill:#64748b}
+      .bt{font-size:14px;font-weight:700}
+      .bs{font-size:13px}
+      .io{fill:#f8fafc;stroke:#94a3b8;stroke-width:1.6}
+      .down{fill:#dbeafe;stroke:#2563eb;stroke-width:2}
+      .up{fill:#ccfbf1;stroke:#0d9488;stroke-width:2}
+      .mid{fill:#ede9fe;stroke:#7c3aed;stroke-width:2}
+      .S{font-weight:700;fill:#7c3aed}
+      .C{font-weight:700;fill:#d97706}
+    </style>
+  </defs>
+
+  <rect width="900" height="500" fill="#ffffff"/>
+  <text x="450" y="34" text-anchor="middle" class="title">Conditional UNet · 96² pixel-space · ~34M params</text>
+
+  <!-- Input / output -->
+  <rect x="80" y="64" width="180" height="40" rx="10" class="io"/>
+  <text x="170" y="89" text-anchor="middle" font-size="13" fill="#334155">input  x_t · 3×96²</text>
+  <rect x="640" y="64" width="180" height="40" rx="10" class="io"/>
+  <text x="730" y="89" text-anchor="middle" font-size="13" fill="#334155">output  ε · 3×96²</text>
+
+  <!-- Encoder -->
+  <rect x="80" y="146" width="180" height="52" rx="12" class="down"/>
+  <text x="170" y="168" text-anchor="middle" class="bt" fill="#1e3a8a">Down 1</text>
+  <text x="170" y="187" text-anchor="middle" class="bs" fill="#1d4ed8">128 · 96²</text>
+
+  <rect x="80" y="228" width="180" height="52" rx="12" class="down"/>
+  <text x="170" y="250" text-anchor="middle" class="bt" fill="#1e3a8a">Down 2</text>
+  <text x="170" y="269" text-anchor="middle" class="bs" fill="#1d4ed8">256 · 48²　<tspan class="C">C</tspan></text>
+
+  <rect x="80" y="310" width="180" height="52" rx="12" class="down"/>
+  <text x="170" y="332" text-anchor="middle" class="bt" fill="#1e3a8a">Down 3</text>
+  <text x="170" y="351" text-anchor="middle" class="bs" fill="#1d4ed8">512 · 24²　<tspan class="S">S</tspan> <tspan class="C">C</tspan></text>
+
+  <!-- Bottleneck -->
+  <rect x="360" y="392" width="180" height="52" rx="12" class="mid"/>
+  <text x="450" y="414" text-anchor="middle" class="bt" fill="#5b21b6">Bottleneck</text>
+  <text x="450" y="433" text-anchor="middle" class="bs" fill="#6d28d9">512 · 12²　<tspan class="S">S</tspan> <tspan class="C">C</tspan></text>
+
+  <!-- Decoder -->
+  <rect x="640" y="310" width="180" height="52" rx="12" class="up"/>
+  <text x="730" y="332" text-anchor="middle" class="bt" fill="#115e59">Up 3</text>
+  <text x="730" y="351" text-anchor="middle" class="bs" fill="#0f766e">256 · 24²　<tspan class="S">S</tspan> <tspan class="C">C</tspan></text>
+
+  <rect x="640" y="228" width="180" height="52" rx="12" class="up"/>
+  <text x="730" y="250" text-anchor="middle" class="bt" fill="#115e59">Up 2</text>
+  <text x="730" y="269" text-anchor="middle" class="bs" fill="#0f766e">128 · 48²　<tspan class="C">C</tspan></text>
+
+  <rect x="640" y="146" width="180" height="52" rx="12" class="up"/>
+  <text x="730" y="168" text-anchor="middle" class="bt" fill="#115e59">Up 1</text>
+  <text x="730" y="187" text-anchor="middle" class="bs" fill="#0f766e">128 · 96²</text>
+
+  <!-- Main flow -->
+  <line x1="170" y1="104" x2="170" y2="144" stroke="#64748b" stroke-width="2" marker-end="url(#arrow-gray)"/>
+  <line x1="170" y1="198" x2="170" y2="226" stroke="#64748b" stroke-width="2" marker-end="url(#arrow-gray)"/>
+  <line x1="170" y1="280" x2="170" y2="308" stroke="#64748b" stroke-width="2" marker-end="url(#arrow-gray)"/>
+  <line x1="260" y1="350" x2="358" y2="408" stroke="#64748b" stroke-width="2" marker-end="url(#arrow-gray)"/>
+  <line x1="540" y1="408" x2="638" y2="350" stroke="#64748b" stroke-width="2" marker-end="url(#arrow-gray)"/>
+  <line x1="730" y1="310" x2="730" y2="282" stroke="#64748b" stroke-width="2" marker-end="url(#arrow-gray)"/>
+  <line x1="730" y1="228" x2="730" y2="200" stroke="#64748b" stroke-width="2" marker-end="url(#arrow-gray)"/>
+  <line x1="730" y1="146" x2="730" y2="106" stroke="#64748b" stroke-width="2" marker-end="url(#arrow-gray)"/>
+
+  <!-- Caption -->
+  <text x="450" y="470" text-anchor="middle" class="tiny">Condition: time + pooled text → every ResBlock　|　text tokens → Cross-Attn</text>
+  <text x="450" y="488" text-anchor="middle" class="tiny"><tspan class="S">S</tspan> = self-attn (pixel↔pixel)　　<tspan class="C">C</tspan> = cross-attn (pixel↔text)　　blue: encoder · purple: bottleneck · teal: decoder</text>
+</svg>

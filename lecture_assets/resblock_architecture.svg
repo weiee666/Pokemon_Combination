@@ -1,0 +1,92 @@
+<svg width="660" height="520" viewBox="0 0 660 520" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,1 L9,5 L0,9 Z" fill="#64748b"/>
+    </marker>
+    <marker id="ar-o" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,1 L9,5 L0,9 Z" fill="#0d9488"/>
+    </marker>
+    <marker id="ar-c" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,1 L9,5 L0,9 Z" fill="#f97316"/>
+    </marker>
+    <style>
+      .title{font-size:18px;font-weight:700;fill:#0f172a}
+      .io{fill:#f1f5f9;stroke:#94a3b8;stroke-width:1.6}
+      .blk{fill:#dbeafe;stroke:#2563eb;stroke-width:1.8}
+      .cond{fill:#fff7ed;stroke:#f97316;stroke-width:1.6}
+      .skip{fill:#ccfbf1;stroke:#0d9488;stroke-width:1.6}
+      .add{fill:#ffffff;stroke:#334155;stroke-width:2}
+      .lab{font-size:13px;fill:#334155}
+      .sub{font-size:12px;fill:#1d4ed8}
+      .h{font-size:13px;font-weight:700}
+      .tiny{font-size:11px;fill:#64748b}
+    </style>
+  </defs>
+
+  <rect width="660" height="520" fill="#ffffff"/>
+  <text x="330" y="28" text-anchor="middle" class="title">ResBlock · one block (each UNet box stacks 2)</text>
+
+  <!-- Input -->
+  <rect x="200" y="44" width="200" height="36" rx="9" class="io"/>
+  <text x="300" y="67" text-anchor="middle" class="h" fill="#334155">input  x  ·  in_ch</text>
+
+  <!-- block1 -->
+  <rect x="200" y="100" width="200" height="84" rx="11" class="blk"/>
+  <text x="300" y="120" text-anchor="middle" class="h" fill="#1e3a8a">block 1</text>
+  <text x="300" y="140" text-anchor="middle" class="sub">GroupNorm</text>
+  <text x="300" y="158" text-anchor="middle" class="sub">SiLU</text>
+  <text x="300" y="176" text-anchor="middle" class="sub">Conv 3×3 · in→out</text>
+
+  <!-- add condition -->
+  <circle cx="300" cy="212" r="15" class="add"/>
+  <text x="300" y="217" text-anchor="middle" class="h" fill="#334155">+</text>
+
+  <!-- block2 -->
+  <rect x="200" y="244" width="200" height="84" rx="11" class="blk"/>
+  <text x="300" y="264" text-anchor="middle" class="h" fill="#1e3a8a">block 2</text>
+  <text x="300" y="284" text-anchor="middle" class="sub">GroupNorm</text>
+  <text x="300" y="302" text-anchor="middle" class="sub">SiLU</text>
+  <text x="300" y="320" text-anchor="middle" class="sub">Conv 3×3 · out→out</text>
+
+  <!-- add shortcut -->
+  <circle cx="300" cy="356" r="15" class="add"/>
+  <text x="300" y="361" text-anchor="middle" class="h" fill="#334155">+</text>
+
+  <!-- Output -->
+  <rect x="200" y="388" width="200" height="36" rx="9" class="io"/>
+  <text x="300" y="411" text-anchor="middle" class="h" fill="#334155">output  ·  out_ch</text>
+
+  <!-- main flow arrows -->
+  <line x1="300" y1="80"  x2="300" y2="99"  stroke="#64748b" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="300" y1="184" x2="300" y2="196" stroke="#64748b" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="300" y1="227" x2="300" y2="243" stroke="#64748b" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="300" y1="328" x2="300" y2="340" stroke="#64748b" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="300" y1="371" x2="300" y2="387" stroke="#64748b" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- Condition branch (left) -->
+  <rect x="20" y="100" width="150" height="46" rx="9" class="cond"/>
+  <text x="95" y="120" text-anchor="middle" font-size="12.5" font-weight="700" fill="#9a3412">condition c</text>
+  <text x="95" y="138" text-anchor="middle" font-size="11" fill="#9a3412">time + pooled text</text>
+
+  <rect x="20" y="164" width="150" height="46" rx="9" class="cond"/>
+  <text x="95" y="184" text-anchor="middle" font-size="12.5" font-weight="700" fill="#9a3412">SiLU → Linear</text>
+  <text x="95" y="202" text-anchor="middle" font-size="11" fill="#9a3412">c_dim → out_ch</text>
+
+  <line x1="95" y1="146" x2="95" y2="163" stroke="#f97316" stroke-width="1.8" marker-end="url(#ar-c)"/>
+  <path d="M170 187 C235 187 245 212 283 212" fill="none" stroke="#f97316" stroke-width="1.8" marker-end="url(#ar-c)"/>
+  <text x="205" y="232" text-anchor="middle" class="tiny" fill="#c2410c">add c (broadcast over H×W)</text>
+
+  <!-- Shortcut branch (right) -->
+  <rect x="470" y="178" width="170" height="74" rx="11" class="skip"/>
+  <text x="555" y="200" text-anchor="middle" font-size="12.5" font-weight="700" fill="#115e59">shortcut (self.skip)</text>
+  <text x="555" y="220" text-anchor="middle" font-size="11.5" fill="#0f766e">Identity if in = out</text>
+  <text x="555" y="238" text-anchor="middle" font-size="11.5" fill="#0f766e">1×1 Conv if in ≠ out</text>
+
+  <path d="M400 62 H555 V177" fill="none" stroke="#0d9488" stroke-width="1.8" marker-end="url(#ar-o)"/>
+  <text x="478" y="56" class="tiny" fill="#0f766e">x (bypass)</text>
+  <path d="M555 252 V356 H317" fill="none" stroke="#0d9488" stroke-width="1.8" marker-end="url(#ar-o)"/>
+
+  <!-- caption -->
+  <text x="330" y="462" text-anchor="middle" class="tiny">main path  F(x) = block2( block1(x) + c )　·　output = F(x) + shortcut(x)   ← residual</text>
+  <text x="330" y="482" text-anchor="middle" class="tiny">main path learns "what to change"; shortcut carries x straight through (1×1 Conv only to match channels)</text>
+</svg>
